@@ -9,7 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import xyz.teamgravity.retrofitfileupload.BuildConfig
-import xyz.teamgravity.retrofitfileupload.core.util.RonaldoProvider
+import xyz.teamgravity.retrofitfileupload.core.util.FileProvider
 import xyz.teamgravity.retrofitfileupload.data.remote.api.FileApi
 import xyz.teamgravity.retrofitfileupload.data.remote.constant.FileApiConst
 import xyz.teamgravity.retrofitfileupload.data.repository.FileRepository
@@ -46,5 +46,5 @@ object ApplicationModule {
 
     @Provides
     @Singleton
-    fun provideRonaldoProvider(application: Application): RonaldoProvider = RonaldoProvider(application)
+    fun provideRonaldoProvider(application: Application): FileProvider = FileProvider(application)
 }

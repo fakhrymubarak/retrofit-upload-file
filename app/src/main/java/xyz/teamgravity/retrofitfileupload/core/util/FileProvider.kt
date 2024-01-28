@@ -3,7 +3,7 @@ package xyz.teamgravity.retrofitfileupload.core.util
 import android.app.Application
 import java.io.File
 
-class RonaldoProvider(
+class FileProvider(
     private val application: Application,
 ) {
 
