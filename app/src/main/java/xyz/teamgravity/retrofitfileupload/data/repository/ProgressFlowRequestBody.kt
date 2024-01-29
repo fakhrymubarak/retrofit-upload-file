@@ -21,28 +21,28 @@ class ProgressFlowRequestBody(
     override fun contentLength() = file.length()
 
     override fun writeTo(sink: BufferedSink) {
-            val inputStream = FileInputStream(file)
-            val buffer = ByteArray(BUFFER_SIZE)
-            var uploaded: Long = 0
-            val fileSize = file.length()
+        val inputStream = FileInputStream(file)
+        val buffer = ByteArray(BUFFER_SIZE)
+        var uploaded: Long = 0
+        val fileSize = file.length()
 
-            try {
-                while (true) {
-                    val read = inputStream.read(buffer)
-                    if (read == -1) break
+        try {
+            while (true) {
+                val read = inputStream.read(buffer)
+                if (read == -1) break
 
-                    uploaded += read
-                    sink.write(buffer, 0, read)
+                uploaded += read
+                sink.write(buffer, 0, read)
 
-                    val progress = (((uploaded / fileSize.toDouble())) * 100).toInt()
-                    _progressFlow.update { progress }
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
-                inputStream.close()
+                val progress = (((uploaded / fileSize.toDouble())) * 100).toInt()
+                _progressFlow.update { progress }
             }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            inputStream.close()
+        }
     }
 
     companion object {
