@@ -4,6 +4,13 @@ A modern Android application demonstrating file upload functionality using Retro
 Compose, and Hilt dependency injection. This project showcases real-time upload progress tracking
 and clean architecture principles.
 
+## 🎥 Showcase
+
+<video src="showcase/sc_20250930_010854.mp4" controls width="480">
+</video>
+
+[Download video](showcase/sc_20250930_010854.mp4)
+
 ## 🚀 Features
 
 - **File Upload**: Upload images to a backend server using Retrofit
