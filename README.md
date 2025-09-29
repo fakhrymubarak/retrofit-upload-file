@@ -6,10 +6,7 @@ and clean architecture principles.
 
 ## 🎥 Showcase
 
-<video src="showcase/sc_20250930_010854.mp4" controls width="480">
-</video>
-
-[Download video](showcase/sc_20250930_010854.mp4)
+![Showcase](showcase/sc_20250930_014912-ezgif.com-video-to-gif-converter.gif)
 
 ## 🚀 Features
 
