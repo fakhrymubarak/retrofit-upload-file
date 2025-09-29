@@ -36,6 +36,12 @@ This project follows clean architecture principles:
 📁 injection/
 ├── 🏗️ app/ - Application class
 └── 🔧 provide/ - Hilt modules
+
+📁 backend/
+├── 🚀 server.go - Go backend server
+├── 📚 SERVICES.md - Backend documentation
+├── 📖 README.md - Backend setup guide
+└── 📦 go.mod - Go module file
 ```
 
 ## 🛠️ Tech Stack
@@ -50,40 +56,86 @@ This project follows clean architecture principles:
 
 ## 📋 Prerequisites
 
-- Android Studio Arctic Fox or later
+- Android Studio Ladybug or later
 - Android SDK 21+ (Android 5.0)
 - Kotlin 1.8+
 - Backend server running (see Backend Setup section)
 
 ## 🔧 Backend Setup
 
-**Important**: This Android app requires a backend server to handle file uploads. Please follow
-these steps:
+**Important**: This Android app requires a backend server to handle file uploads.
 
-1. **Clone the backend repository**:
+### Use the Included Go Backend
+
+This project includes a simple Go backend server in the `backend/` directory:
+
+1. **Navigate to the backend directory**:
    ```bash
-   git clone https://github.com/philipplackner/FileUpload.git
-   cd FileUpload
+   cd backend
    ```
 
-2. **Run the backend server**:
+2. **Run the Go server**:
    ```bash
-   # Navigate to the backend project directory
-   cd FileUpload
-   
-   # Run the server (follow the backend README for specific instructions)
-   # The server should run on http://localhost:8080
+   go run server.go
    ```
 
-3. **Verify the backend is running**:
-   - The backend should be accessible at `http://localhost:8080`
-   - The Android app is configured to connect to `http://0.0.0.0:8080/` (which maps to localhost)
+3. **Server will start on**: `http://localhost:8080`
+
+
+### Verify the Backend is Running
+
+- The backend should be accessible at `http://localhost:8080`
+- The Android app is configured to connect to `http://0.0.0.0:8080/` (which maps to localhost)
+- Test with: `curl http://localhost:8080/health`
+
+## 🚀 Running the Backend
+
+### Quick Start (Go Backend)
+
+1. **Navigate to the backend directory**:
+   ```bash
+   cd backend
+   ```
+
+2. **Run the Go server**:
+   ```bash
+   go run server.go
+   ```
+
+3. **Server will start on**: `http://localhost:8080`
+
+### Backend Configuration
+
+The Go backend supports environment variables for customization:
+
+```bash
+# Custom port
+PORT=8081 go run server.go
+
+# Custom upload directory
+UPLOAD_DIR=/path/to/uploads go run server.go
+
+# Custom max file size (in bytes)
+MAX_FILE_SIZE=209715200 go run server.go  # 200MB
+```
+
+### Testing the Backend
+
+Test the server with curl:
+
+```bash
+# Health check
+curl http://localhost:8080/health
+
+# File upload test
+curl -X POST -F "image=@/path/to/your/image.jpg" http://localhost:8080/file
+```
 
 ## 🚀 Getting Started
 
 1. **Clone this repository**:
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/fakhrymubarak/retrofit-upload-file.git
    cd retrofit-upload-file
    ```
 
@@ -190,11 +242,60 @@ image.
 3. **Build Errors**: Clean and rebuild the project
 4. **Dependency Issues**: Sync project with Gradle files
 
+### BASE_URL Configuration Issues
+
+The app's BASE_URL configuration depends on whether you're using an emulator or physical device:
+
+#### For Android Emulator:
+- **Current Configuration**: `http://0.0.0.0:8080/` ✅ (Works correctly)
+- **Alternative**: `http://10.0.2.2:8080/` (Android emulator host mapping)
+- **Why**: Emulator maps `10.0.2.2` to the host machine's `localhost`
+
+#### For Physical Device:
+- **Required Configuration**: `http://YOUR_COMPUTER_IP:8080/`
+- **Find your IP**: 
+  ```bash
+  # Windows
+  ipconfig
+  
+  # macOS/Linux
+  ifconfig | grep "inet "
+  # or
+  ipconfig getifaddr en0
+  ```
+- **Example**: `http://192.168.1.100:8080/`
+- **Why**: Physical devices need the actual IP address of your computer
+
+#### How to Change BASE_URL:
+
+1. **Open**: `app/src/main/java/xyz/teamgravity/retrofitfileupload/data/remote/constant/FileApiConst.kt`
+2. **Update the BASE_URL**:
+   ```kotlin
+   object FileApiConst {
+       // For emulator (current)
+       const val BASE_URL = "http://0.0.0.0:8080/"
+       
+       // For physical device (replace with your computer's IP)
+       const val BASE_URL = "http://192.168.1.100:8080/"
+   }
+   ```
+
+#### Network Security Configuration:
+
+The app's network security config (`res/xml/network_security_config.xml`) already includes:
+- `localhost` and `127.0.0.1` - for emulator
+- `0.0.0.0` - for current configuration
+- `10.0.2.2` - for emulator host access
+
+For physical devices, you may need to add your computer's IP to the network security config.
+
 ### Debug Tips
 
 - Check Android Studio's Logcat for error messages
 - Verify the backend server is accessible from your device/emulator
 - Ensure both devices are on the same network (for physical devices)
+- Test server connectivity: `curl http://YOUR_IP:8080/health`
+- Check firewall settings on your computer
 
 ## 📚 Learning Resources
 

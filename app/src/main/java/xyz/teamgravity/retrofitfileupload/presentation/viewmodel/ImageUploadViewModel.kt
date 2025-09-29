@@ -43,6 +43,7 @@ class ImageUploadViewModel @Inject constructor(
             // Launch other scope to collect progressFlow
             launch(Dispatchers.Main) {
                 fileRequestBody.progressFlow.collect { progress ->
+                    println("progress: $progress")
                     _uploadState.emit(
                         _uploadState.value.copy(uiType = UiType.LOADING, progress = progress / 100f)
                     )

@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Retrofit File Upload"
-include ':app'
+include(":app")
