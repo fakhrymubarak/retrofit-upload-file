@@ -10,7 +10,8 @@ import java.io.File
 import java.io.FileInputStream
 
 class ProgressFlowRequestBody(
-    private val mediaType: String, private val file: File
+    private val mediaType: String,
+    private val file: File,
 ) : RequestBody() {
 
     private val _progressFlow = MutableStateFlow(0)
@@ -21,31 +22,42 @@ class ProgressFlowRequestBody(
     override fun contentLength() = file.length()
 
     override fun writeTo(sink: BufferedSink) {
-        val inputStream = FileInputStream(file)
+
         val buffer = ByteArray(BUFFER_SIZE)
         var uploaded: Long = 0
         val fileSize = file.length()
 
-        try {
-            while (true) {
-                val read = inputStream.read(buffer)
-                if (read == -1) break
+        FileInputStream(file).use { inputStream ->
+            try {
+                while (true) {
+                    val read = inputStream.read(buffer)
+                    if (read == -1) break
 
-                uploaded += read
-                sink.write(buffer, 0, read)
+                    uploaded += read
+                    sink.write(buffer, 0, read)
 
-                val progress = (((uploaded / fileSize.toDouble())) * 100).toInt()
-                _progressFlow.update { progress }
+                    val progress = if (fileSize > 0) {
+                        (((uploaded / fileSize.toDouble())) * 100).toInt()
+                    } else {
+                        100
+                    }
+                    _progressFlow.update { progress }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                throw e // Re-throw to let the caller handle the error appropriately
             }
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            inputStream.close()
         }
     }
 
     companion object {
-        private const val BUFFER_SIZE = 1024
+        /**
+         * Buffer size for reading file chunks in bytes.
+         *
+         * 8KB provides a good balance between memory usage and I/O performance.
+         * Larger buffers reduce the number of read operations but use more memory.
+         * Smaller buffers provide more granular progress updates but may impact performance.
+         */
+        private const val BUFFER_SIZE = 8192
     }
 }

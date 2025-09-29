@@ -29,7 +29,7 @@ object ApplicationModule {
             .writeTimeout(0, TimeUnit.MINUTES)
             .readTimeout(0, TimeUnit.MINUTES)
             .connectTimeout(1, TimeUnit.MINUTES)
-            .addInterceptor(httpLoggingInterceptor)
+            //.addInterceptor(httpLoggingInterceptor) // Enable this will invoke writeTo() twice on every upload. See [ProgressFlowRequestBody].
             .build()
     }
     @Provides

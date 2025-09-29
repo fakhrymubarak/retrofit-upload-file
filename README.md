@@ -61,11 +61,7 @@ This project follows clean architecture principles:
 - Kotlin 1.8+
 - Backend server running (see Backend Setup section)
 
-## 🔧 Backend Setup
-
-**Important**: This Android app requires a backend server to handle file uploads.
-
-### Use the Included Go Backend
+## 🔧 Backend Setup : Use the Included Go Backend
 
 This project includes a simple Go backend server in the `backend/` directory:
 

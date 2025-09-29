@@ -47,6 +47,7 @@ fun ImageUploadScreen(
                     Button(onClick = viewModel::onUpload) {
                         Text(text = "UPLOAD IMAGE")
                     }
+                    Text("Success Upload Image")
                 }
                 UiType.ERROR -> {
                     Button(onClick = viewModel::onUpload) {
